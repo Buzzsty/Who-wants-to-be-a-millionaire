@@ -77,14 +77,19 @@ showQuestion();
 }
 
 function showVictory(){
-    victoryScreen.style.display='flex';
-    victoryImage.style.width='0';
-    victoryImage.style.opacity=0;
+    victoryScreen.style.display = 'flex';
+    
+    // Réinitialiser les dimensions pour garder les proportions naturelles
+    victoryImage.style.width = '';   // enlève la largeur forcée
+    victoryImage.style.height = '';  // enlève la hauteur forcée
+    victoryImage.style.opacity = 0;
+
+    // Petite pause avant l'animation
     setTimeout(()=>{
-        victoryImage.style.opacity=1;
-        victoryImage.style.width='60%';   // zoom jusqu'à 60%
-        // height:auto est déjà défini dans le CSS pour garder les proportions
-    },50);
+        victoryImage.style.opacity = 1;
+        victoryImage.style.width = '60%';  // on ne touche pas à la hauteur, elle s'ajuste automatiquement
+    }, 50);
+
     victorySound.play();
 }
 
