@@ -1,9 +1,6 @@
-/* Fond et base */
 :root{
     --bg-dark: rgba(0,0,0,0.65);
-    --accent: rgba(255,255,255,0.06);
 }
-
 html,body{
     height:100%;
     margin:0;
@@ -11,8 +8,6 @@ html,body{
     background: url('plateau.jpg') no-repeat center center fixed;
     background-size: cover;
     color: #fff;
-    -webkit-font-smoothing:antialiased;
-    -moz-osx-font-smoothing:grayscale;
 }
 
 /* Lights overlay */
@@ -43,7 +38,6 @@ html,body{
     background: radial-gradient(circle at 80% 60%, rgba(138,43,226,0.55), rgba(138,43,226,0.06) 30%, transparent 60%);
     animation: rightMove 7s linear infinite;
 }
-
 @keyframes leftMove {
     0% { transform: translateX(-10%) rotate(-10deg); opacity:0.08; }
     50% { transform: translateX(8%) rotate(8deg); opacity:0.25; }
@@ -55,14 +49,11 @@ html,body{
     100% { transform: translateX(10%) rotate(12deg); opacity:0.06; }
 }
 
-/* Intensification pour la victoire */
-#lights.intense .light {
-    filter: blur(40px) saturate(170%);
-    opacity: 0.9 !important;
-    animation-duration: 1.8s !important;
-}
+/* pulse class used by JS to create a short light surge */
+#lights.pulse .light { opacity: 0.45 !important; filter: blur(60px) saturate(160%); transition: opacity 0.25s ease; }
+#lights.intense .light { opacity: 0.95 !important; filter: blur(30px) saturate(200%); animation-duration: 1.6s !important; }
 
-/* Ecran d'accueil */
+/* Start screen */
 #start-screen {
     position: absolute;
     z-index: 3;
@@ -74,14 +65,10 @@ html,body{
     align-items:center;
     gap:16px;
 }
-#start-screen h1 {
-    font-size: 32px;
-    margin:0;
-    letter-spacing: 1px;
-}
+#start-screen h1 { font-size:32px; margin:0; }
 #startBtn {
-    font-size: 22px;
-    padding: 14px 28px;
+    font-size:22px;
+    padding:14px 28px;
     border-radius:12px;
     border:none;
     cursor:pointer;
@@ -90,8 +77,7 @@ html,body{
     box-shadow: 0 8px 30px rgba(0,0,0,0.6);
 }
 
-/* Conteneur du jeu */
-#game { z-index: 3; position: relative; padding-top: 40px; }
+/* Game container */
 #question-container {
     background: var(--bg-dark);
     padding: 18px;
@@ -99,15 +85,10 @@ html,body{
     border-radius: 16px;
     width: 92%;
     max-width: 520px;
+    z-index: 3;
     box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-    border: 1px solid rgba(255,255,255,0.03);
 }
-#question {
-    font-size: 20px;
-    margin: 6px 0 12px;
-}
-
-/* Réponses */
+#question { font-size: 20px; margin:6px 0 12px; }
 #answers { display:flex; flex-direction:column; gap:10px; align-items:center; }
 .answer {
     width: 86%;
@@ -121,15 +102,35 @@ html,body{
     box-shadow: 0 6px 18px rgba(0,0,0,0.45) inset;
     color: #fff;
 }
-.answer:active { transform: translateY(2px); }
-.answer:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,0,0,0.55); }
-
-/* Couleurs par défaut pour réponses (override via JS en cas de bonne/mauvaise) */
 .answer.correct { background: linear-gradient(90deg, rgba(40,200,120,0.95), rgba(30,160,90,0.85)); }
-.answer.wrong { background: linear-gradient(90deg, rgba(220,40,40,0.95), rgba(180,30,30,0.85)); }
-
-/* Résultat texte */
+.answer.wrong   { background: linear-gradient(90deg, rgba(220,40,40,0.95), rgba(180,30,30,0.85)); }
 #result { text-align:center; font-size:20px; margin-top:14px; min-height:26px; }
 
-/* Image victoire */
-#victory-
+/* Victory image - hidden by default, use !important to prevent accidental inline show */
+#victory-image {
+    display: none !important;
+    position: fixed;
+    z-index: 4;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.6);
+    width: 78%;
+    max-width: 420px;
+    border-radius: 18px;
+    opacity: 0;
+    box-shadow: 0 18px 50px rgba(0,0,0,0.6);
+    transition: transform 1.0s cubic-bezier(.2,.9,.2,1), opacity 1.0s ease;
+}
+#victory-image.show {
+    display: block !important;
+    transform: translate(-50%, -50%) scale(1.18);
+    opacity: 1;
+}
+
+/* Responsive tweaks */
+@media (max-width:420px){
+    #victory-image { width: 92%; max-width: 360px; }
+    #startBtn { font-size:18px; padding:12px 20px; }
+    #question { font-size:18px; }
+    .answer { font-size:16px; padding:10px; width:92%; }
+}
