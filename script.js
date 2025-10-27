@@ -77,14 +77,16 @@ showQuestion();
 }
 
 function showVictory(){
-victoryScreen.style.display='flex';
-victoryImage.style.width='0';
-victoryImage.style.opacity=0;
-setTimeout(()=>{
-victoryImage.style.opacity=1;
-victoryImage.style.width='60%'; // zoom jusqu'à 60%
-},50);
-victorySound.play();
+    victoryScreen.style.display='flex';
+    victoryImage.style.width='0';
+    victoryImage.style.height='0';
+    victoryImage.style.opacity=0;
+    setTimeout(()=>{
+        victoryImage.style.opacity=1;
+        victoryImage.style.width='60%';   // zoom jusqu'à 60%
+        victoryImage.style.height='60%';  // zoom jusqu'à 60%
+    },50);
+    victorySound.play();
 }
 
 document.getElementById('startBtn').addEventListener('click',()=>{
