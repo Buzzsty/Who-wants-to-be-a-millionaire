@@ -1,0 +1,38 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background: url('plateau.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: white;
+    text-align: center;
+}
+
+#question-container {
+    background: rgba(0,0,0,0.6);
+    padding: 20px;
+    margin: 50px auto;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 500px;
+}
+
+.answer {
+    display: block;
+    width: 80%;
+    margin: 10px auto;
+    padding: 10px;
+    font-size: 18px;
+    border-radius: 10px;
+    cursor: pointer;
+    border: none;
+}
+
+.answer:hover {
+    background-color: rgba(255,255,255,0.2);
+}
+
+#result {
+    font-size: 24px;
+    margin-top: 20px;
+}
