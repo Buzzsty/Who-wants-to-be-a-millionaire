@@ -1,44 +1,44 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Qui veut gagner des millions</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Qui veut gagner des millions</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Musiques -->
-    <audio id="music" src="musique.mp3" loop></audio>
-    <audio id="finale" src="finale.mp3" loop></audio>
-    <audio id="good" src="bonne.mp3"></audio>
-    <audio id="wrong" src="mauvaise.mp3"></audio>
-    <audio id="victory" src="victoire.mp3"></audio>
+<!-- Musiques -->
+<audio id="music" src="musique.mp3" loop></audio>
+<audio id="finale" src="finale.mp3" loop></audio>
+<audio id="good" src="bonne.mp3"></audio>
+<audio id="wrong" src="mauvaise.mp3"></audio>
+<audio id="victory" src="victoire.mp3"></audio>
 
-    <!-- Écran d'accueil -->
-    <div id="start-screen">
-        <h1>Qui veut gagner des millions</h1>
-        <button id="startBtn">🎮 Lancer le jeu</button>
-    </div>
+<!-- Écran d'accueil -->
+<div id="start-screen">
+<h1>Qui veut gagner des millions</h1>
+<button id="startBtn">🎮 Lancer le jeu</button>
+</div>
 
-    <!-- Écran du jeu -->
-    <div id="game" style="display:none;">
-        <div id="question-container">
-            <h1 id="question"></h1>
-            <div id="answers">
-                <button class="answer" onclick="checkAnswer(0)"></button>
-                <button class="answer" onclick="checkAnswer(1)"></button>
-                <button class="answer" onclick="checkAnswer(2)"></button>
-                <button class="answer" onclick="checkAnswer(3)"></button>
-            </div>
-        </div>
-        <div id="result"></div>
-    </div>
+<!-- Écran du jeu -->
+<div id="game" style="display:none;">
+<div id="question-container">
+<h1 id="question"></h1>
+<div id="answers">
+<button class="answer" onclick="checkAnswer(0)"></button>
+<button class="answer" onclick="checkAnswer(1)"></button>
+<button class="answer" onclick="checkAnswer(2)"></button>
+<button class="answer" onclick="checkAnswer(3)"></button>
+</div>
+</div>
+<div id="result"></div>
+</div>
 
-    <!-- Image de victoire -->
-    <div id="victory-screen" style="display:none;">
-        <img src="victoire.jpg" alt="Victoire" id="victory-image">
-    </div>
+<!-- Image de victoire -->
+<div id="victory-screen">
+<img src="victoire.jpg" alt="Victoire" id="victory-image">
+</div>
 
-    <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
