@@ -97,11 +97,13 @@ z-index:9999;
 overflow:hidden;
 }
 
-#victory-image{
-    width:0;           /* départ petit */
-    max-width:30%;     /* largeur finale */
-    height:auto;       /* conserve les proportions */
-    border-radius:15px;
-    opacity:0;
-    transition: width 2s ease-in-out, opacity 1.5s ease-in;
+#victory-image {
+    width: auto;             /* largeur naturelle */
+    height: auto;            /* hauteur naturelle */
+    max-width: 30%;          /* ne jamais dépasser 30% de la largeur de l’écran */
+    max-height: 30%;         /* ne jamais dépasser 30% de la hauteur de l’écran */
+    border-radius: 15px;
+    opacity: 0;
+    transform: scale(0);     /* départ très petit */
+    transition: transform 2s ease-in-out, opacity 1.5s ease-in;
 }
