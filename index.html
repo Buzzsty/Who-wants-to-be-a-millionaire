@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <!-- Musiques (éléments <audio> pour la principale & finale - les sons ponctuels sont créés en JS) -->
+    <!-- Musiques principales (HTML audio éléments) -->
     <audio id="music" src="musique.mp3" loop></audio>
     <audio id="finale" src="finale.mp3" loop></audio>
 
@@ -37,9 +37,10 @@
         <div id="result"></div>
     </div>
 
-    <!-- Image de victoire -->
+    <!-- Image de victoire (masquée par défaut) -->
     <img id="victory-image" src="victoire.jpg" alt="Victoire">
 
+    <!-- Script chargé en defer pour que le DOM soit disponible -->
     <script src="script.js" defer></script>
 </body>
 </html>
