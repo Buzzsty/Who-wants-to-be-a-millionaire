@@ -46,7 +46,6 @@ function checkAnswer(index) {
     }
     for(let btn of answers) btn.disabled = true;
 
-    // Passe à la question suivante après 2 secondes
     setTimeout(() => {
         currentQuestion++;
         if(currentQuestion < questions.length) {
@@ -58,4 +57,10 @@ function checkAnswer(index) {
     }, 2000);
 }
 
-showQuestion();
+// Démarrer le jeu et la musique
+document.getElementById('startBtn').addEventListener('click', () => {
+    document.getElementById('start-screen').style.display = 'none';
+    document.getElementById('game').style.display = 'block';
+    document.getElementById('music').play();
+    showQuestion();
+});
