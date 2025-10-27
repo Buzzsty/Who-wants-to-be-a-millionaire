@@ -103,3 +103,23 @@ overflow:hidden;
     transform: scale(0); /* départ réduit à 0 */
     transition: transform 2s ease-in-out, opacity 1.5s ease-in;
 }
+
+/* Pour les petits écrans (téléphones) */
+@media screen and (max-width: 600px) {
+    body {
+        background-size: contain; /* adapte l'image pour qu'elle soit entièrement visible */
+        background-position: center top; /* recentre l'image si besoin */
+    }
+
+    #question-container {
+        width: 95%; /* légèrement plus large pour mobile */
+        margin: 20px auto;
+        padding: 15px;
+    }
+
+    .answer {
+        font-size: 16px;
+        padding: 8px;
+        width: 90%;
+    }
+}
