@@ -98,10 +98,11 @@ overflow:hidden;
 }
 
 #victory-image{
-width:0; /* départ petit */
-max-width:60%; /* taille finale maximale */
-height:auto;
-border-radius:15px;
-opacity:0;
-transition:width 2s ease-in-out, opacity 1.5s ease-in;
+    width:0;              /* départ petit */
+    max-width:60%;        /* largeur maximale */
+    max-height:60%;       /* hauteur maximale */
+    height:auto;          /* conserve les proportions */
+    border-radius:15px;
+    opacity:0;
+    transition:width 2s ease-in-out, height 2s ease-in-out, opacity 1.5s ease-in;
 }
