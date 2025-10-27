@@ -76,18 +76,16 @@ showQuestion();
 }
 }
 
-function showVictory(){
+function showVictory() {
     victoryScreen.style.display = 'flex';
     
-    // Réinitialiser les dimensions pour garder les proportions naturelles
-    victoryImage.style.width = '';   // enlève la largeur forcée
-    victoryImage.style.height = '';  // enlève la hauteur forcée
+    // Réinitialise l'opacité et le scale
     victoryImage.style.opacity = 0;
-
-    // Petite pause avant l'animation
-    setTimeout(()=>{
+    victoryImage.style.transform = 'scale(0)';
+    
+    setTimeout(() => {
         victoryImage.style.opacity = 1;
-        victoryImage.style.width = '60%';  // on ne touche pas à la hauteur, elle s'ajuste automatiquement
+        victoryImage.style.transform = 'scale(1)'; // zoom vers sa taille normale
     }, 50);
 
     victorySound.play();
