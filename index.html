@@ -1,13 +1,21 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Qui veut gagner des millions</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+    <!-- Musiques (éléments <audio> pour la principale & finale - les sons ponctuels sont créés en JS) -->
     <audio id="music" src="musique.mp3" loop></audio>
+    <audio id="finale" src="finale.mp3" loop></audio>
+
+    <!-- Overlay lumières (bleu / violet) -->
+    <div id="lights">
+        <div class="light light-left"></div>
+        <div class="light light-right"></div>
+    </div>
 
     <!-- Écran d'accueil -->
     <div id="start-screen">
@@ -29,6 +37,9 @@
         <div id="result"></div>
     </div>
 
-    <script src="script.js"></script>
+    <!-- Image de victoire -->
+    <img id="victory-image" src="victoire.jpg" alt="Victoire">
+
+    <script src="script.js" defer></script>
 </body>
 </html>
