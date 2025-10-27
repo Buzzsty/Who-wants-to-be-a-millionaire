@@ -26,6 +26,7 @@ let currentQuestion = 0;
 const music = document.getElementById('music'); // musique principale
 const goodSound = new Audio('bonne.mp3');
 const wrongSound = new Audio('mauvaise.mp3');
+const victorySound = new Audio('victoire.mp3');
 
 function showQuestion() {
     document.getElementById('question').textContent = questions[currentQuestion].question;
@@ -36,8 +37,8 @@ function showQuestion() {
         answers[i].style.backgroundColor = '';
     }
     document.getElementById('result').textContent = '';
-    // Relancer musique principale
-    music.play();
+    // Relancer musique principale uniquement si ce n'est pas la dernière question
+    if(currentQuestion < questions.length - 1) music.play();
 }
 
 function checkAnswer(index) {
@@ -50,24 +51,32 @@ function checkAnswer(index) {
         answers[index].style.backgroundColor = 'green';
         document.getElementById('result').textContent = "Bonne réponse !";
         goodSound.play();
+
+        setTimeout(() => {
+            currentQuestion++;
+            if(currentQuestion < questions.length) {
+                showQuestion();
+            } else {
+                // Dernière question réussie
+                document.getElementById('result').textContent = "🎉 Félicitations, jeu terminé !";
+                document.getElementById('question-container').style.display = 'none';
+                victorySound.play(); // musique de victoire
+            }
+        }, 2000);
+
     } else {
         answers[index].style.backgroundColor = 'red';
         answers[questions[currentQuestion].correct].style.backgroundColor = 'green';
-        document.getElementById('result').textContent = "Mauvaise réponse...";
+        document.getElementById('result').textContent = "Mauvaise réponse... Réessayez !";
         wrongSound.play();
+
+        // Relance de la même question après 2 secondes
+        setTimeout(() => {
+            showQuestion();
+        }, 2000);
     }
 
     for(let btn of answers) btn.disabled = true;
-
-    setTimeout(() => {
-        currentQuestion++;
-        if(currentQuestion < questions.length) {
-            showQuestion();
-        } else {
-            document.getElementById('result').textContent = "Jeu terminé !";
-            document.getElementById('question-container').style.display = 'none';
-        }
-    }, 2000);
 }
 
 // Démarrer le jeu et musique au clic sur "Lancer le jeu"
