@@ -32,6 +32,14 @@ body {
     border: none;
     border-radius: 10px;
     cursor: pointer;
+    background: linear-gradient(45deg, #0044cc, #6600cc);
+    color: white;
+    transition: all 0.3s ease;
+}
+
+#startBtn:hover {
+    transform: scale(1.1);
+    background: linear-gradient(45deg, #3366ff, #9933ff);
 }
 
 #question-container {
@@ -41,6 +49,8 @@ body {
     border-radius: 15px;
     width: 90%;
     max-width: 500px;
+    box-shadow: 0 0 20px rgba(0,0,255,0.5), 0 0 40px rgba(128,0,255,0.5);
+    transition: box-shadow 0.5s;
 }
 
 .answer {
@@ -53,13 +63,26 @@ body {
     cursor: pointer;
     border: none;
     transition: all 0.3s;
+    background: rgba(255,255,255,0.1);
+    color: white;
 }
 
 .answer:hover {
-    background-color: rgba(255,255,255,0.2);
+    background-color: rgba(255,255,255,0.3);
 }
 
 #result {
     font-size: 24px;
     margin-top: 20px;
+    text-shadow: 0 0 10px #000;
+}
+
+/* Effet lumineux spécial pour la dernière question */
+.final-question {
+    animation: glow 1.5s infinite alternate;
+}
+
+@keyframes glow {
+    0% { box-shadow: 0 0 20px #0055ff, 0 0 40px #6600cc; }
+    100% { box-shadow: 0 0 40px #00aaff, 0 0 80px #cc00ff; }
 }
