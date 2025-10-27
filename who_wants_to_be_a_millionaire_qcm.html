@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Qui veut gagner des millions - Mini QCM</title>
+  <style>
+    :root{--bg:#071428;--card:#0f2b4a;--accent:#ffd700;--muted:#9fb3c8;--correct:#27ae60;--wrong:#e74c3c}
+    html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial}
+    body{background:linear-gradient(180deg,#031226 0%,#071428 60%);color:#e6f0f6;display:flex;align-items:center;justify-content:center;padding:20px}
+    .stage{width:100%;max-width:760px}
+    .card{background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));border-radius:12px;padding:18px;box-shadow:0 10px 30px rgba(2,6,23,0.6);border:1px solid rgba(255,255,255,0.03}
+    header{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+    .logo{width:60px;height:60px;border-radius:8px;background:radial-gradient(circle at 30% 30%, #ffd700, #ffb300);display:flex;align-items:center;justify-content:center;color:#071428;font-weight:800;font-size:18px}
+    .title{line-height:1}
+    .title h1{margin:0;font-size:18px}
+    .title p{margin:0;font-size:12px;color:var(--muted)}
+    .presenter{margin:8px 0;padding:10px;border-radius:8px;background:linear-gradient(90deg,rgba(255,215,0,0.06),transparent);color:#fff;font-weight:600}
+    .qbox{display:flex;gap:14px}
+    .left{flex:1}
+    .question{font-size:18px;padding:12px;border-radius:10px;background:linear-gradient(90deg,rgba(255,255,255,0.02),transparent);border:1px solid rgba(255,255,255,0.03);margin-bottom:12px}
+    .answers{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .btn{padding:12px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit;font-weight:700;cursor:pointer;text-align:left;transition:transform .12s ease,box-shadow .12s}
+    .btn:active{transform:translateY(1px)}
+    .btn.disabled{opacity:.45;pointer-events:none}
+    .btn.correct{background:linear-gradient(90deg,rgba(39,174,96,0.15),transparent);border-color:rgba(39,174,96,0.6)}
+    .btn.wrong{background:linear-gradient(90deg,rgba(231,76,60,0.12),transparent);border-color:rgba(231,76,60,0.6)}
+    .controls{display:flex;gap:8px;align-items:center;margin-top:12px}
+    .lifeline{padding:8px 10px;border-radius:8px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.02);cursor:pointer}
+    .lifeline.used{opacity:.35;pointer-events:none}
+    .prize{width:200px}
+    .prize ul{list-style:none;padding:10px;margin:0;border-radius:8px;background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent);border:1px solid rgba(255,255,255,0.03)}
+    .prize li{padding:6px 8px;border-radius:6px;margin-bottom:6px;font-weight:700}
+    .prize li.active{background:linear-gradient(90deg,rgba(255,215,0,0.08),transparent);color:var(--accent)}
+    .footer{display:flex;justify-content:space-between;align-items:center;margin-top:12px;color:var(--muted);font-size:13px}
+    .big{font-size:20px;font-weight:800;color:var(--accent)}
+    @media(max-width:640px){.qbox{flex-direction:column}.prize{order:2;width:100%}}
+  </style>
+</head>
+<body>
+  <div class="stage">
+    <div class="card">
+      <header>
+        <div class="logo">M</div>
+        <div class="title"><h1>Qui veut gagner des millions — Mini QCM</h1><p>Ambiance & présentateur — 4 questions</p></div>
+      </header>
+
+      <div id="presenter" class="presenter">Bienvenue ! Le présentateur est prêt. Appuie sur Démarrer pour lancer le jeu.</div>
+
+      <div class="qbox">
+        <div class="left">
+          <div id="question" class="question">—</div>
+          <div class="answers" id="answers"></div>
+
+          <div class="controls">
+            <button id="startBtn" class="lifeline">Démarrer</button>
+            <button id="fifty" class="lifeline">50:50</button>
+            <button id="audience" class="lifeline">Jury</button>
+            <button id="phone" class="lifeline">Appel</button>
+            <div style="flex:1"></div>
+            <div id="status" style="font-weight:700"></div>
+          </div>
+        </div>
+
+        <aside class="prize">
+          <ul id="prizelist">
+            <li data-i="4" class="active">Question 4 — 1 000 €</li>
+            <li data-i="3">Question 3 — 5 000 €</li>
+            <li data-i="2">Question 2 — 10 000 €</li>
+            <li data-i="1">Question 1 — 25 000 €</li>
+          </ul>
+        </aside>
+      </div>
+
+      <div class="footer">
+        <div>Mode : <span class="big">Présentateur</span></div>
+        <div>Mobile-ready — Ouvrir sur ton téléphone</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Questions par défaut — modifie ici si tu veux
+    const QUESTIONS = [
+      {
+        q: "Quel est l'élément chimique dont le symbole est O ?",
+        choices: ["Or","Oxygène","Osmium","Oganesson"],
+        answer: 1
+      },
+      {
+        q: "Quelle est la capitale de la France ?",
+        choices: ["Madrid","Berlin","Paris","Rome"],
+        answer: 2
+      },
+      {
+        q: "Combien de côtés a un hexagone ?",
+        choices: ["5","6","7","8"],
+        answer: 1
+      },
+      {
+        q: "Qui a peint la Mona Lisa ?",
+        choices: ["Michel-Ange","Léonard de Vinci","Raphaël","Donatello"],
+        answer: 1
+      }
+    ];
+
+    let index = 0; // question courante (0..3)
+    let usedFifty=false, usedAudience=false, usedPhone=false;
+    const qEl = document.getElementById('question');
+    const answersEl = document.getElementById('answers');
+    const presenterEl = document.getElementById('presenter');
+    const startBtn = document.getElementById('startBtn');
+    const status = document.getElementById('status');
+    const fiftyBtn = document.getElementById('fifty');
+    const audienceBtn = document.getElementById('audience');
+    const phoneBtn = document.getElementById('phone');
+    const prizeEls = document.querySelectorAll('#prizelist li');
+
+    function speak(text, interrupt=true){
+      if(window.speechSynthesis){
+        if(interrupt) window.speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = 'fr-FR';
+        window.speechSynthesis.speak(u);
+      }
+    }
+
+    function renderQuestion(){
+      const cur = QUESTIONS[index];
+      qEl.textContent = `Q${index+1} — ${cur.q}`;
+      answersEl.innerHTML = '';
+      cur.choices.forEach((c,i)=>{
+        const b = document.createElement('button');
+        b.className='btn';
+        b.dataset.i = i;
+        b.innerHTML = `<strong>${String.fromCharCode(65+i)}.</strong> ${c}`;
+        b.addEventListener('click', onAnswer);
+        answersEl.appendChild(b);
+      });
+      presenterEl.textContent = `Question ${index+1} — bonne chance !`;
+      speak(`Question ${index+1}. ${cur.q}`);
+      updatePrizeHighlight();
+      status.textContent='';
+    }
+
+    function onAnswer(e){
+      const btn = e.currentTarget;
+      const chosen = Number(btn.dataset.i);
+      disableAnswers();
+      const correct = QUESTIONS[index].answer;
+      if(chosen===correct){
+        btn.classList.add('correct');
+        presenterEl.textContent = `Bonne réponse !`;
+        speak('Bonne réponse !');
+        setTimeout(()=>{
+          index++;
+          if(index>=QUESTIONS.length){
+            presenterEl.textContent='Félicitations ! Tu as terminé le quiz.';
+            speak('Félicitations ! Vous avez gagné.');
+            status.textContent='Terminé';
+            updatePrizeHighlight();
+          } else {
+            renderQuestion();
+          }
+        },1200);
+      } else {
+        btn.classList.add('wrong');
+        // show correct
+        const all = document.querySelectorAll('.btn');
+        all.forEach(b=>{
+          if(Number(b.dataset.i)===correct) b.classList.add('correct');
+        });
+        presenterEl.textContent = `Dommage — la bonne réponse était ${String.fromCharCode(65+correct)}.`;
+        speak(`Dommage. La bonne réponse était ${QUESTIONS[index].choices[correct]}`);
+        status.textContent='Perdu';
+      }
+    }
+
+    function disableAnswers(){
+      document.querySelectorAll('.btn').forEach(b=>b.classList.add('disabled'));
+    }
+
+    function updatePrizeHighlight(){
+      prizeEls.forEach(li=>li.classList.remove('active'));
+      const activeIndex = QUESTIONS.length - index; // mapping simple pour l'affichage
+      // clamp
+      const idx = Math.max(0,Math.min(QUESTIONS.length, activeIndex));
+      prizeEls.forEach(li=>{
+        if(Number(li.dataset.i)===Math.max(1,QUESTIONS.length-index)) li.classList.add('active');
+      });
+    }
+
+    startBtn.addEventListener('click', ()=>{
+      index = 0; usedFifty=false; usedAudience=false; usedPhone=false;
+      fiftyBtn.classList.remove('used'); audienceBtn.classList.remove('used'); phoneBtn.classList.remove('used');
+      renderQuestion();
+    });
+
+    fiftyBtn.addEventListener('click', ()=>{
+      if(usedFifty) return; usedFifty=true; fiftyBtn.classList.add('used');
+      const correct = QUESTIONS[index].answer;
+      const choices = [...Array(4).keys()].filter(i=>i!==correct);
+      // remove two random wrong answers
+      shuffle(choices);
+      const toRemove = choices.slice(0,2);
+      document.querySelectorAll('.btn').forEach(b=>{
+        if(toRemove.includes(Number(b.dataset.i))) b.classList.add('disabled');
+      });
+      presenterEl.textContent='50:50 — deux réponses retirées.';
+      speak('Je retire deux mauvaises réponses.');
+    });
+
+    audienceBtn.addEventListener('click', ()=>{
+      if(usedAudience) return; usedAudience=true; audienceBtn.classList.add('used');
+      // fake distribution
+      const correct = QUESTIONS[index].answer;
+      const dist = [10,15,60,15];
+      // rotate so correct is majority
+      while(true){
+        if(dist[correct]>=40) break;
+        shuffle(dist);
+      }
+      presenterEl.textContent=`Jury: ${dist.map((v,i)=>String.fromCharCode(65+i)+':'+v+'%').join('  ')}`;
+      speak('Le public penche majoritairement pour une réponse.');
+    });
+
+    phoneBtn.addEventListener('click', ()=>{
+      if(usedPhone) return; usedPhone=true; phoneBtn.classList.add('used');
+      const correct = QUESTIONS[index].answer;
+      const hint = QUESTIONS[index].choices[correct];
+      presenterEl.textContent = `Appel à un ami: il pense que la réponse est "${hint}".`;
+      speak(`Ton ami pense que la réponse est ${hint}`);
+    });
+
+    function shuffle(a){
+      for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;
+    }
+
+    // Init
+    qEl.textContent='Appuie sur Démarrer pour lancer le jeu.';
+
+    // Allow editing QUESTIONS easily from console for advanced users
+    window.QUIZ = {QUESTIONS};
+  </script>
+</body>
+</html>
