@@ -104,5 +104,5 @@ overflow:hidden;
     height:auto;          /* conserve les proportions */
     border-radius:15px;
     opacity:0;
-    transition:width 2s ease-in-out, height 2s ease-in-out, opacity 1.5s ease-in;
+    transition: width 2s ease-in-out, opacity 1.5s ease-in;
 }
