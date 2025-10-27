@@ -77,12 +77,12 @@ showQuestion();
 }
 
 function showVictory(){
-    victoryScreen.style.display='flex';
-    victoryImage.style.width='0';
-    victoryImage.style.opacity=0;
+    victoryScreen.style.display = 'flex';
+    victoryImage.style.opacity = 0;
+    victoryImage.style.transform = 'scale(0)'; // départ très petit
     setTimeout(()=>{
-        victoryImage.style.opacity=1;
-        victoryImage.style.width='30%';   // zoom progressif largeur seulement
+        victoryImage.style.opacity = 1;
+        victoryImage.style.transform = 'scale(1)'; // zoom jusqu'à taille max 30%
     },50);
     victorySound.play();
 }
