@@ -78,9 +78,11 @@ showQuestion();
 
 function showVictory(){
 victoryScreen.style.display='flex';
+victoryImage.style.width='0';
+victoryImage.style.opacity=0;
 setTimeout(()=>{
 victoryImage.style.opacity=1;
-victoryImage.style.transform='scale(1.2)';
+victoryImage.style.width='60%'; // zoom jusqu'à 60%
 },50);
 victorySound.play();
 }
