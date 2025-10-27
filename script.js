@@ -48,14 +48,12 @@ function showQuestion() {
     }
     document.getElementById('result').textContent = '';
 
-    // 🔆 Effet lumineux pour la question finale
     const container = document.getElementById('question-container');
     container.classList.remove('final-question');
 
     stopAllMusic();
 
     if (currentQuestion === questions.length - 1) {
-        // dernière question → musique finale + effet visuel
         container.classList.add('final-question');
         finaleMusic.currentTime = 0;
         finaleMusic.play().catch(err => console.warn('Erreur musique finale :', err));
@@ -83,9 +81,10 @@ function checkAnswer(index) {
             if (currentQuestion < questions.length) {
                 showQuestion();
             } else {
+                // 🎉 Fin du jeu → musique + image victoire
                 document.getElementById('result').textContent = "🎉 Félicitations, vous avez gagné !";
                 document.getElementById('question-container').style.display = 'none';
-                victorySound.play();
+                showVictoryScreen();
             }
         }, 2000);
 
@@ -93,7 +92,6 @@ function checkAnswer(index) {
         answers[index].style.backgroundColor = 'red';
         answers[questions[currentQuestion].correct].style.backgroundColor = 'green';
         document.getElementById('result').textContent = "Mauvaise réponse...";
-
         wrongSound.play();
 
         setTimeout(() => {
@@ -105,6 +103,14 @@ function checkAnswer(index) {
             showQuestion();
         }, 3000);
     }
+}
+
+function showVictoryScreen() {
+    const victoryScreen = document.getElementById('victory-screen');
+    const victoryImage = document.getElementById('victory-image');
+    victoryScreen.style.display = 'flex';
+    victoryImage.style.animation = 'zoomVictory 8s ease-in-out forwards';
+    victorySound.play();
 }
 
 document.getElementById('startBtn').addEventListener('click', () => {
