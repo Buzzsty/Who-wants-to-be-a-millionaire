@@ -1,188 +1,88 @@
-// --- QUESTIONS (modifie si besoin) ---
 const questions = [
-    { question: "Quelle est la capitale de la France ?", answers: ["Paris", "Lyon", "Marseille", "Nice"], correct: 0 },
-    { question: "Combien de continents y a-t-il ?", answers: ["5","6","7","8"], correct: 2 },
-    { question: "Qui a peint la Joconde ?", answers: ["Michel-Ange","Léonard de Vinci","Raphaël","Van Gogh"], correct: 1 },
-    { question: "Quelle planète est connue comme la planète rouge ?", answers: ["Terre","Mars","Jupiter","Vénus"], correct: 1 }
+    {
+        question: "Quelle est la capitale de la France ?",
+        answers: ["Paris", "Lyon", "Marseille", "Nice"],
+        correct: 0
+    },
+    {
+        question: "Combien de continents y a-t-il ?",
+        answers: ["5", "6", "7", "8"],
+        correct: 2
+    },
+    {
+        question: "Qui a peint la Joconde ?",
+        answers: ["Michel-Ange", "Léonard de Vinci", "Raphaël", "Van Gogh"],
+        correct: 1
+    },
+    {
+        question: "Quelle planète est connue comme la planète rouge ?",
+        answers: ["Terre", "Mars", "Jupiter", "Venus"],
+        correct: 1
+    }
 ];
 
 let currentQuestion = 0;
-let audioCtx = null; // WebAudio context (créé au premier clic)
-const music = document.getElementById('music');      // musique principale (HTML audio)
-const finaleMusic = document.getElementById('finale'); // musique de la question finale (HTML audio)
 
-// Sons ponctuels (fichiers présents dans le dossier)
+const music = document.getElementById('music'); // musique principale
 const goodSound = new Audio('bonne.mp3');
 const wrongSound = new Audio('mauvaise.mp3');
 const victorySound = new Audio('victoire.mp3');
 
-// Elements DOM (ils existent grâce au defer)
-const startBtn = document.getElementById('startBtn');
-const startScreen = document.getElementById('start-screen');
-const gameDiv = document.getElementById('game');
-const lights = document.getElementById('lights');
-const victoryImage = document.getElementById('victory-image');
-
-// sécurité : verifier éléments
-if(!startBtn || !gameDiv || !startScreen) {
-    console.error('Éléments essentiels introuvables dans le DOM.');
-}
-
-// --- UTIL ---
-function sleep(ms){ return new Promise(res => setTimeout(res, ms)); }
-
-// WebAudio beep
-function playBeep(frequency = 440, duration = 0.12, when = 0, volume = 0.08) {
-    if (!audioCtx) return;
-    const now = audioCtx.currentTime;
-    const o = audioCtx.createOscillator();
-    const g = audioCtx.createGain();
-    o.type = 'sine';
-    o.frequency.setValueAtTime(frequency, now + when);
-    g.gain.setValueAtTime(volume, now + when);
-    g.gain.exponentialRampToValueAtTime(0.0001, now + when + duration);
-    o.connect(g); g.connect(audioCtx.destination);
-    o.start(now + when);
-    o.stop(now + when + duration + 0.02);
-}
-
-// sons progressifs (suspense)
-async function playProgressiveTones(isFinal = false){
-    if (!audioCtx) return;
-    const baseFreq = isFinal ? 380 : 300;
-    const steps = isFinal ? 7 : 5;
-    let interval = isFinal ? 420 : 520;
-    for(let i=0;i<steps;i++){
-        const freq = baseFreq + i * (isFinal ? 80 : 60);
-        playBeep(freq, 0.12, 0, 0.09 + i*0.01);
-        await sleep(interval);
-        interval = Math.max(140, Math.round(interval * 0.85));
-    }
-}
-
-// pulse lights (ajoute et retire la classe)
-function pulseLightsOnce(){
-    if(!lights) return;
-    lights.classList.add('pulse');
-    setTimeout(()=> lights.classList.remove('pulse'), 700);
-}
-
-// Affiche la question (gère pause, suspense puis lecture)
-async function showQuestion(){
-    const qEl = document.getElementById('question');
+function showQuestion() {
+    document.getElementById('question').textContent = questions[currentQuestion].question;
     const answers = document.getElementsByClassName('answer');
-
-    qEl.textContent = questions[currentQuestion].question;
-    for(let i=0;i<answers.length;i++){
+    for(let i = 0; i < answers.length; i++) {
         answers[i].textContent = questions[currentQuestion].answers[i];
-        answers[i].disabled = true;      // disabled pendant suspense
-        answers[i].classList.remove('correct','wrong');
+        answers[i].disabled = false;
+        answers[i].style.backgroundColor = '';
     }
     document.getElementById('result').textContent = '';
-
-    // stop toutes les musiques avant suspense
-    try { music.pause(); music.currentTime = 0; } catch(e){}
-    try { finaleMusic.pause(); finaleMusic.currentTime = 0; } catch(e){}
-
-    const isFinal = (currentQuestion === questions.length - 1);
-    await playProgressiveTones(isFinal);
-
-    // après suspense : lancer la musique adaptée
-    try {
-        if(isFinal){
-            await finaleMusic.play();
-        } else {
-            await music.play();
-        }
-    } catch(err){
-        // possible si le navigateur refuse play() — log pour debug
-        console.warn('play() blocked ou erreur :', err);
-    }
-
-    pulseLightsOnce();
-
-    // activer réponses
-    for(let i=0;i<answers.length;i++) answers[i].disabled = false;
+    // Relancer musique principale uniquement si ce n'est pas la dernière question
+    if(currentQuestion < questions.length - 1) music.play();
 }
 
-// Vérifier réponse
-function checkAnswer(index){
+function checkAnswer(index) {
     const answers = document.getElementsByClassName('answer');
-    const correctIndex = questions[currentQuestion].correct;
+    // Stop musique principale
+    music.pause();
+    music.currentTime = 0;
 
-    // stop musiques
-    try { music.pause(); music.currentTime = 0; } catch(e){}
-    try { finaleMusic.pause(); finaleMusic.currentTime = 0; } catch(e){}
-
-    // désactiver boutons
-    for(let i=0;i<answers.length;i++) answers[i].disabled = true;
-
-    if(index === correctIndex){
-        answers[index].classList.add('correct');
+    if(index === questions[currentQuestion].correct) {
+        answers[index].style.backgroundColor = 'green';
         document.getElementById('result').textContent = "Bonne réponse !";
-        try { goodSound.play(); } catch(e){ console.warn('bonne.mp3 play failed', e); }
+        goodSound.play();
 
         setTimeout(() => {
             currentQuestion++;
-            if(currentQuestion < questions.length){
+            if(currentQuestion < questions.length) {
                 showQuestion();
             } else {
-                handleVictory();
+                // Dernière question réussie
+                document.getElementById('result').textContent = "🎉 Félicitations, jeu terminé !";
+                document.getElementById('question-container').style.display = 'none';
+                victorySound.play(); // musique de victoire
             }
-        }, 1400);
+        }, 2000);
 
     } else {
-        answers[index].classList.add('wrong');
-        answers[correctIndex].classList.add('correct');
+        answers[index].style.backgroundColor = 'red';
+        answers[questions[currentQuestion].correct].style.backgroundColor = 'green';
         document.getElementById('result').textContent = "Mauvaise réponse... Réessayez !";
-        try { wrongSound.play(); } catch(e){ console.warn('mauvaise.mp3 play failed', e); }
+        wrongSound.play();
 
-        // relancer même question après pause
+        // Relance de la même question après 2 secondes
         setTimeout(() => {
             showQuestion();
-        }, 1500);
+        }, 2000);
     }
+
+    for(let btn of answers) btn.disabled = true;
 }
 
-// Victoire finale
-function handleVictory(){
-    document.getElementById('result').textContent = "🎉 Félicitations, jeu terminé !";
-
-    // Afficher image et intensifier lumières (vérif element)
-    if(victoryImage){
-        victoryImage.style.display = 'block';         // display forced, CSS .show controls animation/opacity
-        setTimeout(()=> victoryImage.classList.add('show'), 120);
-    }
-    if(lights) lights.classList.add('intense');
-
-    try { victorySound.play(); } catch(e){ console.warn('victoire.mp3 play failed', e); }
-}
-
-// start button (resume audio context + init)
-startBtn.addEventListener('click', async () => {
-    // créer AudioContext au premier geste utilisateur
-    if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    }
-    if (audioCtx.state === 'suspended') {
-        try { await audioCtx.resume(); } catch(e){ console.warn('resume audioCtx failed', e); }
-    }
-
-    // Attempt to prime HTML audio elements (some navigateurs exigent interaction)
-    try { await music.play(); music.pause(); music.currentTime = 0; } catch(e){}
-    try { await finaleMusic.play(); finaleMusic.pause(); finaleMusic.currentTime = 0; } catch(e){}
-
-    startScreen.style.display = 'none';
-    gameDiv.style.display = 'block';
-    currentQuestion = 0;
+// Démarrer le jeu et musique au clic sur "Lancer le jeu"
+document.getElementById('startBtn').addEventListener('click', () => {
+    document.getElementById('start-screen').style.display = 'none';
+    document.getElementById('game').style.display = 'block';
+    music.play();
     showQuestion();
 });
-
-// fermer l'écran victoire au clic (sécurisé)
-if(victoryImage){
-    victoryImage.addEventListener('click', () => {
-        victoryImage.classList.remove('show');
-        lights.classList.remove('intense');
-        setTimeout(()=> victoryImage.style.display = 'none', 600);
-    });
-}
