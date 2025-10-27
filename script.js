@@ -23,44 +23,50 @@ const questions = [
 
 let currentQuestion = 0;
 
-// 🎵 Déclaration des sons
-const music = document.getElementById('music');          // musique normale
-const finaleMusic = new Audio('finale.mp3');              // musique finale spéciale
-const goodSound = new Audio('bonne.mp3');
-const wrongSound = new Audio('mauvaise.mp3');
-const victorySound = new Audio('victoire.mp3');
+// 🎵 Récupération des éléments audio HTML
+const music = document.getElementById('music');
+const finaleMusic = document.getElementById('finale');
+const goodSound = document.getElementById('good');
+const wrongSound = document.getElementById('wrong');
+const victorySound = document.getElementById('victory');
+
+function stopAllMusic() {
+    [music, finaleMusic, goodSound, wrongSound, victorySound].forEach(m => {
+        m.pause();
+        m.currentTime = 0;
+    });
+}
 
 function showQuestion() {
     const q = questions[currentQuestion];
     document.getElementById('question').textContent = q.question;
-
     const answers = document.getElementsByClassName('answer');
     for (let i = 0; i < answers.length; i++) {
         answers[i].textContent = q.answers[i];
         answers[i].disabled = false;
         answers[i].style.backgroundColor = '';
     }
-
     document.getElementById('result').textContent = '';
 
-    // 🎶 Choisir la musique selon la question
+    // 🔆 Effet lumineux pour la question finale
+    const container = document.getElementById('question-container');
+    container.classList.remove('final-question');
+
     stopAllMusic();
 
     if (currentQuestion === questions.length - 1) {
-        // dernière question → musique finale
+        // dernière question → musique finale + effet visuel
+        container.classList.add('final-question');
         finaleMusic.currentTime = 0;
-        finaleMusic.play();
+        finaleMusic.play().catch(err => console.warn('Erreur musique finale :', err));
     } else {
-        // musique principale pour les autres questions
         music.currentTime = 0;
-        music.play();
+        music.play().catch(err => console.warn('Erreur musique principale :', err));
     }
 }
 
 function checkAnswer(index) {
     const answers = document.getElementsByClassName('answer');
-
-    // 🔇 Stop toutes les musiques dès qu’une réponse est cliquée
     stopAllMusic();
 
     for (let btn of answers) btn.disabled = true;
@@ -74,11 +80,9 @@ function checkAnswer(index) {
 
         setTimeout(() => {
             currentQuestion++;
-
             if (currentQuestion < questions.length) {
                 showQuestion();
             } else {
-                // 🎉 Fin du jeu
                 document.getElementById('result').textContent = "🎉 Félicitations, vous avez gagné !";
                 document.getElementById('question-container').style.display = 'none';
                 victorySound.play();
@@ -92,10 +96,8 @@ function checkAnswer(index) {
 
         wrongSound.play();
 
-        // ⏳ Après 3 secondes, relancer la même question
         setTimeout(() => {
             if (currentQuestion === questions.length - 1) {
-                // Rejouer musique finale pour la dernière question
                 finaleMusic.play();
             } else {
                 music.play();
@@ -105,15 +107,6 @@ function checkAnswer(index) {
     }
 }
 
-// 🧠 Fonction utilitaire : stop toutes les musiques avant d’en rejouer une
-function stopAllMusic() {
-    [music, finaleMusic, goodSound, wrongSound, victorySound].forEach(m => {
-        m.pause();
-        m.currentTime = 0;
-    });
-}
-
-// ▶️ Démarrage du jeu
 document.getElementById('startBtn').addEventListener('click', () => {
     document.getElementById('start-screen').style.display = 'none';
     document.getElementById('game').style.display = 'block';
