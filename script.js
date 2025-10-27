@@ -23,6 +23,10 @@ const questions = [
 
 let currentQuestion = 0;
 
+const music = document.getElementById('music'); // musique principale
+const goodSound = new Audio('bonne.mp3');
+const wrongSound = new Audio('mauvaise.mp3');
+
 function showQuestion() {
     document.getElementById('question').textContent = questions[currentQuestion].question;
     const answers = document.getElementsByClassName('answer');
@@ -32,18 +36,27 @@ function showQuestion() {
         answers[i].style.backgroundColor = '';
     }
     document.getElementById('result').textContent = '';
+    // Relancer musique principale
+    music.play();
 }
 
 function checkAnswer(index) {
     const answers = document.getElementsByClassName('answer');
+    // Stop musique principale
+    music.pause();
+    music.currentTime = 0;
+
     if(index === questions[currentQuestion].correct) {
         answers[index].style.backgroundColor = 'green';
         document.getElementById('result').textContent = "Bonne réponse !";
+        goodSound.play();
     } else {
         answers[index].style.backgroundColor = 'red';
         answers[questions[currentQuestion].correct].style.backgroundColor = 'green';
         document.getElementById('result').textContent = "Mauvaise réponse...";
+        wrongSound.play();
     }
+
     for(let btn of answers) btn.disabled = true;
 
     setTimeout(() => {
@@ -57,10 +70,10 @@ function checkAnswer(index) {
     }, 2000);
 }
 
-// Démarrer le jeu et la musique
+// Démarrer le jeu et musique au clic sur "Lancer le jeu"
 document.getElementById('startBtn').addEventListener('click', () => {
     document.getElementById('start-screen').style.display = 'none';
     document.getElementById('game').style.display = 'block';
-    document.getElementById('music').play();
+    music.play();
     showQuestion();
 });
