@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qui veut gagner des millions</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game">
+        <audio id="music" src="musique.mp3" autoplay loop></audio>
+        <div id="question-container">
+            <h1 id="question"></h1>
+            <div id="answers">
+                <button class="answer" onclick="checkAnswer(0)"></button>
+                <button class="answer" onclick="checkAnswer(1)"></button>
+                <button class="answer" onclick="checkAnswer(2)"></button>
+                <button class="answer" onclick="checkAnswer(3)"></button>
+            </div>
+        </div>
+        <div id="result"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
