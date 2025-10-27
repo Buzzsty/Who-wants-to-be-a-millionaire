@@ -23,7 +23,7 @@ const questions = [
 
 let currentQuestion = 0;
 
-// 🎵 Musiques
+// 🎵 Récupération des éléments audio HTML
 const music = document.getElementById('music');
 const finaleMusic = document.getElementById('finale');
 const goodSound = document.getElementById('good');
@@ -40,22 +40,22 @@ function stopAllMusic() {
 function showQuestion() {
     const q = questions[currentQuestion];
     document.getElementById('question').textContent = q.question;
-
     const answers = document.getElementsByClassName('answer');
     for (let i = 0; i < answers.length; i++) {
         answers[i].textContent = q.answers[i];
         answers[i].disabled = false;
         answers[i].style.backgroundColor = '';
     }
-
     document.getElementById('result').textContent = '';
 
+    // 🔆 Effet lumineux pour la question finale
     const container = document.getElementById('question-container');
     container.classList.remove('final-question');
 
     stopAllMusic();
 
     if (currentQuestion === questions.length - 1) {
+        // dernière question → musique finale + effet visuel
         container.classList.add('final-question');
         finaleMusic.currentTime = 0;
         finaleMusic.play().catch(err => console.warn('Erreur musique finale :', err));
@@ -83,9 +83,9 @@ function checkAnswer(index) {
             if (currentQuestion < questions.length) {
                 showQuestion();
             } else {
-                // Victoire finale
+                document.getElementById('result').textContent = "🎉 Félicitations, vous avez gagné !";
                 document.getElementById('question-container').style.display = 'none';
-                showVictoryScreen();
+                victorySound.play();
             }
         }, 2000);
 
@@ -93,6 +93,7 @@ function checkAnswer(index) {
         answers[index].style.backgroundColor = 'red';
         answers[questions[currentQuestion].correct].style.backgroundColor = 'green';
         document.getElementById('result').textContent = "Mauvaise réponse...";
+
         wrongSound.play();
 
         setTimeout(() => {
@@ -106,20 +107,8 @@ function checkAnswer(index) {
     }
 }
 
-function showVictoryScreen() {
-    const victoryScreen = document.getElementById('victory-screen');
-    const victoryImage = document.getElementById('victory-image');
-
-    victoryScreen.style.display = 'flex';
-
-    // déclenche animation de zoom + apparition
-    setTimeout(() => {
-        victoryImage.style.opacity = 1;
-        victoryImage.style.transform = 'scale(1.2)';
-    }, 50);
-
-    victorySound.play();
-}
-
 document.getElementById('startBtn').addEventListener('click', () => {
-    document.get
+    document.getElementById('start-screen').style.display = 'none';
+    document.getElementById('game').style.display = 'block';
+    showQuestion();
+});
