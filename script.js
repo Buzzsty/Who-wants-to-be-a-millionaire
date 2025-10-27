@@ -83,8 +83,8 @@ function showVictory(){
     victoryImage.style.opacity=0;
     setTimeout(()=>{
         victoryImage.style.opacity=1;
-        victoryImage.style.width='60%';   // zoom jusqu'à 60%
-        victoryImage.style.height='60%';  // zoom jusqu'à 60%
+        victoryImage.style.width='30%';   // zoom jusqu'à 30%
+        victoryImage.style.height='30%';  // zoom jusqu'à 30%
     },50);
     victorySound.play();
 }
